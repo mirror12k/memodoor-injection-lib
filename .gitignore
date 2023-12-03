@@ -1,1 +1,2 @@
-library.so
+*.so
+__pycache__
