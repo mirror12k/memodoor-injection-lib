@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+docker build -t "http-memory-bug" docker
+docker run -it --rm --cap-drop=ALL -v "$PWD:/app" -p8999:8999 -v "$PWD/docker:/app/docker:ro" --name running-http-memory-bug "http-memory-bug"
