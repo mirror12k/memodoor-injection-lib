@@ -1,0 +1,159 @@
+openapi: 3.0.0
+info:
+  title: MemoDoor API
+  version: 1.0.0
+  description: API for interacting with system resources and executing code.
+servers:
+  - url: http://localhost:8999
+    description: Debugging server
+
+paths:
+  /:
+    get:
+      summary: Root endpoint
+      responses:
+        '200':
+          description: Success response
+
+  /maps:
+    get:
+      summary: Get memory maps
+      responses:
+        '200':
+          description: Memory maps of the process
+
+  /env:
+    get:
+      summary: Get environment variables
+      responses:
+        '200':
+          description: List of environment variables
+
+  /threads:
+    get:
+      summary: Get thread information
+      responses:
+        '200':
+          description: Information about the threads
+
+  /process:
+    get:
+      summary: Get process information
+      responses:
+        '200':
+          description: Information about the current process
+
+  /memory/{address}:
+    get:
+      summary: Get memory content
+      parameters:
+        - name: address
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The address in memory to read from
+      responses:
+        '200':
+          description: Memory content at the specified address
+    put:
+      summary: Write to memory
+      parameters:
+        - name: address
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The address in memory to write to
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Memory content written successfully
+
+  /exec/{address}:
+    get:
+      summary: Execute address
+      parameters:
+        - name: address
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Command to execute
+      responses:
+        '200':
+          description: Command executed
+
+  /mmap/{params}:
+    get:
+      summary: Memory map operation
+      parameters:
+        - name: params
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Parameters for memory mapping
+      responses:
+        '200':
+          description: Memory map operation successful
+
+  /search/{pattern}:
+    get:
+      summary: Search memory
+      parameters:
+        - name: pattern
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Hexidecimal pattern to search in memory
+      responses:
+        '200':
+          description: Search results
+
+  /dlsym/{symbol}:
+    get:
+      summary: Symbol lookup
+      parameters:
+        - name: symbol
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Symbol to look up
+      responses:
+        '200':
+          description: Symbol lookup result
+
+  /dlopen/{library}:
+    get:
+      summary: Load shared library by name
+      parameters:
+        - name: library
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Path to the shared library
+      responses:
+        '200':
+          description: Library loaded
+
+  /python:
+    put:
+      summary: Execute Python code
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Standard output from the python code
