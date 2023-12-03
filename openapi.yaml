@@ -13,7 +13,7 @@ paths:
       summary: Root endpoint
       responses:
         '200':
-          description: Success response
+          description: Hello world!
 
   /maps:
     get:
@@ -84,10 +84,10 @@ paths:
           required: true
           schema:
             type: string
-          description: Command to execute
+          description: Function address to execute
       responses:
         '200':
-          description: Command executed
+          description: Function executed
 
   /mmap/{params}:
     get:
