@@ -30,7 +30,7 @@ class TestEndpoint(unittest.TestCase):
         time.sleep(1)
 
         # Make a request to the /maps endpoint
-        response = requests.get(f'http://localhost:{TestEndpoint.test_port}/maps')
+        response = requests.get(f'http://127.0.0.1:{TestEndpoint.test_port}/maps')
 
         # Verify that the response status code is 200
         self.assertEqual(response.status_code, 200)
@@ -52,28 +52,28 @@ class TestEndpoint(unittest.TestCase):
                 self.assertIn('-', parts[0])  # Check for address range format
 
     def test_root_directory(self):
-        response = requests.get(f'http://localhost:{TestEndpoint.test_port}/')
+        response = requests.get(f'http://127.0.0.1:{TestEndpoint.test_port}/')
         self.assertEqual(response.status_code, 200)
 
     def test_env_endpoint(self):
-        response = requests.get(f'http://localhost:{TestEndpoint.test_port}/env')
+        response = requests.get(f'http://127.0.0.1:{TestEndpoint.test_port}/env')
         self.assertEqual(response.status_code, 200)
 
     def test_not_found_endpoint(self):
-        response = requests.get(f'http://localhost:{TestEndpoint.test_port}/not_found')
+        response = requests.get(f'http://127.0.0.1:{TestEndpoint.test_port}/not_found')
         self.assertEqual(response.status_code, 404)
 
     def test_threads_endpoint(self):
-        response = requests.get(f'http://localhost:{TestEndpoint.test_port}/threads')
+        response = requests.get(f'http://127.0.0.1:{TestEndpoint.test_port}/threads')
         self.assertEqual(response.status_code, 200)
 
     def test_process_endpoint(self):
-        response = requests.get(f'http://localhost:{TestEndpoint.test_port}/process')
+        response = requests.get(f'http://127.0.0.1:{TestEndpoint.test_port}/process')
         self.assertEqual(response.status_code, 200)
 
     def test_memory_endpoint(self):
         # Get memory map
-        maps_response = requests.get(f'http://localhost:{TestEndpoint.test_port}/maps')
+        maps_response = requests.get(f'http://127.0.0.1:{TestEndpoint.test_port}/maps')
         self.assertEqual(maps_response.status_code, 200)
 
         # Parse the maps response to find a valid memory address
@@ -91,7 +91,7 @@ class TestEndpoint(unittest.TestCase):
 
         # Read from the memory address
         read_length = 256
-        memory_response = requests.get(f'http://localhost:{TestEndpoint.test_port}/memory/{address}:{read_length:x}')
+        memory_response = requests.get(f'http://127.0.0.1:{TestEndpoint.test_port}/memory/{address}:{read_length:x}')
         self.assertEqual(memory_response.status_code, 200)
         # Add further checks here if necessary, e.g., length of response data
 
@@ -100,7 +100,7 @@ class TestEndpoint(unittest.TestCase):
 
     def test_mmap_endpoint(self):
         # Request to mmap endpoint
-        response = requests.get(f'http://localhost:{TestEndpoint.test_port}/mmap/0:1000:rw-')
+        response = requests.get(f'http://127.0.0.1:{TestEndpoint.test_port}/mmap/0:1000:rw-')
         self.assertEqual(response.status_code, 200)
 
         # Check if response looks like a memory address
@@ -110,7 +110,7 @@ class TestEndpoint(unittest.TestCase):
 
     def test_mmap_and_memory_endpoint(self):
         # Request to mmap endpoint
-        mmap_response = requests.get(f'http://localhost:{TestEndpoint.test_port}/mmap/0:40000:rw-')
+        mmap_response = requests.get(f'http://127.0.0.1:{TestEndpoint.test_port}/mmap/0:40000:rw-')
         self.assertEqual(mmap_response.status_code, 200)
 
         # Check if response looks like a memory address
@@ -123,11 +123,11 @@ class TestEndpoint(unittest.TestCase):
         data_to_write = "helloworldhello!"
 
         # Write data to the memory address using PUT request
-        put_response = requests.put(f'http://localhost:{TestEndpoint.test_port}/memory/{address}:10', data=data_to_write)
+        put_response = requests.put(f'http://127.0.0.1:{TestEndpoint.test_port}/memory/{address}:10', data=data_to_write)
         self.assertEqual(put_response.status_code, 200)
 
         # Read from the memory address using GET request
-        get_response = requests.get(f'http://localhost:{TestEndpoint.test_port}/memory/{address}:10')
+        get_response = requests.get(f'http://127.0.0.1:{TestEndpoint.test_port}/memory/{address}:10')
         self.assertEqual(get_response.status_code, 200)
         
         # Verify the response contains the written data
@@ -135,7 +135,7 @@ class TestEndpoint(unittest.TestCase):
 
     def test_dlsym_printf(self):
         # Request the address of the 'printf' symbol
-        response = requests.get(f'http://localhost:{TestEndpoint.test_port}/dlsym/printf')
+        response = requests.get(f'http://127.0.0.1:{TestEndpoint.test_port}/dlsym/printf')
         self.assertEqual(response.status_code, 200)
 
         # Check if response looks like a memory address
@@ -147,7 +147,7 @@ class TestEndpoint(unittest.TestCase):
         python_script = "print('Hello, World!')"
         
         # Send the script to the /python endpoint
-        response = requests.put(f'http://localhost:{TestEndpoint.test_port}/python', data=python_script)
+        response = requests.put(f'http://127.0.0.1:{TestEndpoint.test_port}/python', data=python_script)
         
         # Check that the request was successful
         self.assertEqual(response.status_code, 200)
@@ -159,7 +159,7 @@ class TestEndpoint(unittest.TestCase):
         python_script = "print(15 + 25)"
         
         # Send the script to the /python endpoint
-        response = requests.put(f'http://localhost:{TestEndpoint.test_port}/python', data=python_script)
+        response = requests.put(f'http://127.0.0.1:{TestEndpoint.test_port}/python', data=python_script)
         
         # Check that the request was successful
         self.assertEqual(response.status_code, 200)
