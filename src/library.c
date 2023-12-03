@@ -39,7 +39,7 @@ void handleDlsym(int socket, const char *symbol, const char *body) {
     if (handle) {
         void *sym = dlsym(handle, symbol);
         if (sym) {
-            snprintf(response, sizeof(response), "HTTP/1.1 200 OK\nContent-Type: text/plain\n\nSymbol '%s' found at address: %p\n", symbol, sym);
+            snprintf(response, sizeof(response), "HTTP/1.1 200 OK\nContent-Type: text/plain\n\n%p", sym);
         } else {
             snprintf(response, sizeof(response), "HTTP/1.1 404 Not Found\nContent-Type: text/plain\n\nSymbol not found.\n");
         }
@@ -55,7 +55,7 @@ void handleDlopen(int socket, const char *libraryPath, const char *body) {
     void *handle = dlopen(libraryPath, RTLD_LAZY);
     char response[1024];
     if (handle) {
-        snprintf(response, sizeof(response), "HTTP/1.1 200 OK\nContent-Type: text/plain\n\nLibrary opened: %p\n", handle);
+        snprintf(response, sizeof(response), "HTTP/1.1 200 OK\nContent-Type: text/plain\n\n%p", handle);
         dlclose(handle);
     } else {
         snprintf(response, sizeof(response), "HTTP/1.1 500 Internal Server Error\nContent-Type: text/plain\n\nFailed to open library.\n");
@@ -264,7 +264,7 @@ void handleMmap(int socket, const char *param, const char *body) {
 
     // Send a success response
     char successResponse[1024];
-    snprintf(successResponse, sizeof(successResponse), "HTTP/1.1 200 OK\n\nMemory mapped at %p.", mappedAddress);
+    snprintf(successResponse, sizeof(successResponse), "HTTP/1.1 200 OK\n\n%p", mappedAddress);
     send(socket, successResponse, strlen(successResponse), 0);
 }
 
