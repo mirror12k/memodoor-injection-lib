@@ -15,7 +15,7 @@
 #include <dlfcn.h>
 #include <dirent.h>
 
-#define PORT 8999
+#define DEFAULT_PORT 8999
 
 typedef void (*RouteHandler)(int, const char *, const char *);
 
@@ -545,10 +545,12 @@ void* socketThread(void *arg) {
 
     printf("socket created\n");
 
-    // Forcefully attaching socket to the port 8999
+    const char *env_port = getenv("MEMODOOR_PORT");
+    int port = env_port ? atoi(env_port) : DEFAULT_PORT;
+
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons(PORT);
+    address.sin_port = htons(port);
 
     if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
         perror("bind failed");
