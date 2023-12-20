@@ -16,7 +16,7 @@ class TestEndpoint(unittest.TestCase):
             env={ **os.environ, "LD_PRELOAD": "./memodoor_inject.so", "MEMODOOR_PORT": str(cls.test_port) },
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            shell=True
+            shell=False
         )
 
     @classmethod
