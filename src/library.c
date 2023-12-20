@@ -182,7 +182,7 @@ void handleSearchMemory(int socket, const char *hexString, const char *body) {
     hexStringToByteArray(hexString, searchBytes, byteArrayLength);
 
     struct sigaction sa;
-    memset(&sa, 0, sizeof(sigaction));
+    memset_s(&sa, 0, sizeof(sigaction));
     sigemptyset(&sa.sa_mask);
     sa.sa_sigaction = segfault_sigaction;
     sa.sa_flags = SA_SIGINFO;
